@@ -24,8 +24,14 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "API is working" });
 });
 
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT} [${isProduction ? "production" : "development"}]`);
-  console.log(`Allowed client URL: ${CLIENT_URL}`);
-  await connectDB();
-});
+console.log(`Mode: ${isProduction ? "production" : "development"} | Allowed client URL: ${CLIENT_URL}`);
+connectDB();
+
+// Local-la mattum listen pannum. Vercel-la exported app-ah Vercel thaane run pannum.
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
